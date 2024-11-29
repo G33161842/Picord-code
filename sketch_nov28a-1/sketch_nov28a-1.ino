@@ -33,11 +33,22 @@ void setup() {
   // 设置网页路由
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
     String html = "<!DOCTYPE html>";
-    html += "<html><head><meta charset='UTF-8'><title>電風扇控制</title></head><body>";
+    html += "<html><head><meta charset='UTF-8'><title>電風扇控制</title>";
+    html += "<style>";
+    html += "body { font-family: Arial, sans-serif; margin: 0; padding: 0; height: 100vh; display: flex; justify-content: center; align-items: center; }";
+    html += "#container { text-align: center; }";
+    html += "h1 { font-size: 3em; margin-bottom: 40px; }";
+    html += "button { width: 300px; height: 100px; font-size: 2em; margin: 20px 0; background-color: #4CAF50; color: white; border: none; border-radius: 10px; cursor: pointer; }";
+    html += "button:hover { background-color: #45a049; }";
+    html += "p { font-size: 1.5em; }";
+    html += "</style></head>";
+    html += "<body>";
+    html += "<div id='container'>";
     html += "<h1>電風扇控制</h1>";
-    html += "<button onclick=\"sendRequest('/on')\">電風扇-開(強中弱)</button><br><br>";
-    html += "<button onclick=\"sendRequest('/off')\">電風扇-關</button><br><br>";
+    html += "<button onclick=\"sendRequest('/on')\">電風扇 - 開 (強中弱)</button><br>";
+    html += "<button onclick=\"sendRequest('/off')\">電風扇 - 關</button><br>";
     html += "<p id='status'>電風扇狀態：未知</p>";
+    html += "</div>";
     html += "<script>";
     html += "function sendRequest(url) {";
     html += "  var xhr = new XMLHttpRequest();";
