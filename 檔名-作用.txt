@@ -10,6 +10,8 @@ ESPAsyncWebServer
 #include <ESPAsyncWebServer.h>
 #include <IRremoteESP8266.h>
 #include <IRsend.h>
+#include <IRrecv.h>
+#include <IRutils.h>
 
 14a測紅外線訊號的
 14b控制暖氣設備的開關
