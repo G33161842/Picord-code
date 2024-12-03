@@ -13,6 +13,7 @@ ESPAsyncWebServer
 #include <IRrecv.h>
 #include <IRutils.h>
 
+nov
 14a測紅外線訊號的
 14b控制暖氣設備的開關
 14b-2控制I2511教室的電風扇 強中弱
@@ -23,3 +24,6 @@ ESPAsyncWebServer
 28a ESP8266 連接手機wifi + ip網址可以進入網頁控制風扇開關
 28a-1 改變了網頁 手機網頁介面 按鈕增大 美化
 28a-2 暖氣的開關
+
+dec
+3a ESP8266接紅外線發射器 連接手機wifi + ip網址可以進入網頁控制風扇開關
