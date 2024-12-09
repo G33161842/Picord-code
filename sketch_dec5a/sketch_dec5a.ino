@@ -5,8 +5,8 @@
 #include <DHT.h>  // 引入 DHT 庫
 
 // Wi-Fi 設定
-const char* ssid = "daniu0807";
-const char* password = "33161842";
+const char* ssid = "picord";
+const char* password = "000010000";
 
 // IR 發射器引腳設定
 const int irPin = D5;
@@ -20,8 +20,8 @@ DHT dht(DHTPin, DHTTYPE);
 // 變數狀態
 int fan = 0;   // 手動模式下風扇狀態（1: 開, 0: 關）
 int autoMode = 0; // 自動模式狀態（1: 開啟, 0: 關閉）
-const float thresholdTemphigh = 27.0;  // 臨界溫度 (28°C 可自行調整)
-const float thresholdTemplow = 26.0;  // 臨界溫度 (26°C 可自行調整)
+const float thresholdTemphigh = 28.0;  // 臨界溫度 (28°C 可自行調整)
+const float thresholdTemplow = 25.0;  // 臨界溫度 (25°C 可自行調整)
 
 // 建立 Web 伺服器
 AsyncWebServer server(80);
@@ -60,8 +60,8 @@ server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
   html += "</style></head><body>";
 
   html += "<h1>電風扇控制</h1>";
-  html += "<button class='button' onclick=\"sendRequest('/on')\">手動開啟風扇</button>";
-  html += "<button class='button' onclick=\"sendRequest('/off')\">手動關閉風扇</button>";
+  html += "<button class='button' onclick=\"sendRequest('/on1')\">手動開啟風扇</button>";
+  html += "<button class='button' onclick=\"sendRequest('/off1')\">手動關閉風扇</button>";
   html += "<button class='button' onclick=\"sendRequest('/auto')\">啟用自動模式</button>";
   html += "<button class='button' onclick=\"sendRequest('/manual')\">切換手動模式</button>";
 
@@ -85,14 +85,14 @@ server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
 
 
   // 手動開啟風扇
-  server.on("/on", HTTP_GET, [](AsyncWebServerRequest *request) {
+  server.on("/on1", HTTP_GET, [](AsyncWebServerRequest *request) {
     irsend.sendSymphony(0xD82, 12);
     fan = 1;
     request->send(200, "text/plain", "電風扇狀態：手動開啟");
   });
 
   // 手動關閉風扇
-  server.on("/off", HTTP_GET, [](AsyncWebServerRequest *request) {
+  server.on("/off1", HTTP_GET, [](AsyncWebServerRequest *request) {
     irsend.sendSymphony(0xD81, 12);
     fan = 0;
     request->send(200, "text/plain", "電風扇狀態：手動關閉");
@@ -133,6 +133,6 @@ void loop() {
     } else {
       Serial.println("讀取溫度失敗");
     }
-    delay(60000);  // 每60秒檢查一次溫度
+    delay(10000);  // 每10秒檢查一次溫度
   }
 }
