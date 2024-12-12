@@ -13,7 +13,7 @@ const int irPin = D5;
 IRsend irsend(irPin);
 
 // DHT 溫度感測器設定
-const int DHTPin = D2;      // DHT 感測器接腳
+const int DHTPin = D4;      // DHT 感測器接腳
 #define DHTTYPE DHT11       // 設定 DHT 型號 (DHT11 或 DHT22)
 DHT dht(DHTPin, DHTTYPE);
 

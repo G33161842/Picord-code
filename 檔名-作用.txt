@@ -2,6 +2,7 @@ https://arduino.esp8266.com/stable/package_esp8266com_index.json
 
 ESP8266
 
+Adafruit SSD1306
 IRremoteESP8266
 ESP8266WiFi
 ESPAsyncWebServer
@@ -29,3 +30,7 @@ dec
 3a ESP8266接紅外線發射器 連接手機wifi + ip網址可以進入網頁控制風扇開關
 5a 新增溫度感測自動開啟功能
 5a-1 ESP8266接溫溼度感測器 網頁顯示溫濕度
+
+12a ESP8266接Adafruit SSD1306 連接Wifi LED顯示目前進度+ESP8266 IP
+
+12a-1 結合5a + 12a的集大成之作 
