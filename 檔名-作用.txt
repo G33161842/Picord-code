@@ -6,6 +6,7 @@ Adafruit SSD1306
 IRremoteESP8266
 ESP8266WiFi
 ESPAsyncWebServer
+DHT
 
 #include <ESP8266WiFi.h>
 #include <ESPAsyncWebServer.h>
@@ -34,3 +35,5 @@ dec
 12a ESP8266接Adafruit SSD1306 連接Wifi LED顯示目前進度+ESP8266 IP
 
 12a-1 結合5a + 12a的集大成之作 
+
+13a ESP8266 接 繼電器 控制插頭設備
