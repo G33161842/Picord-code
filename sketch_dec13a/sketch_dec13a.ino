@@ -1,12 +1,14 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 
-// Wi-Fi 設定
-const char* ssid = "daniu0807";
-const char* password = "33161842";
+const char* ssid = "picord";
+const char* password = "000010000";
+
+//const char* ssid = "daniu0807";
+//const char* password = "33161842";
 
 // 繼電器接的GPIO
-#define RELAY_PIN D5
+#define RELAY_PIN D8
 
 ESP8266WebServer server(80);
 
@@ -38,8 +40,8 @@ const char webpage[] PROGMEM = R"rawliteral(
 </head>
 <body>
   <h1>ESP8266 繼電器控制</h1>
-  <button class="button" onclick="fetch('/on')">開啟繼電器</button>
-  <button class="button" onclick="fetch('/off')">關閉繼電器</button>
+  <button class="button" onclick="fetch('on')">開啟繼電器</button>
+  <button class="button" onclick="fetch('off')">關閉繼電器</button>
 </body>
 </html>
 )rawliteral";
