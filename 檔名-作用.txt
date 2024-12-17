@@ -2,11 +2,11 @@ https://arduino.esp8266.com/stable/package_esp8266com_index.json
 
 ESP8266
 
-Adafruit SSD1306
 IRremoteESP8266
 ESP8266WiFi
 ESPAsyncWebServer
 DHT
+Adafruit SSD1306
 
 #include <ESP8266WiFi.h>
 #include <ESPAsyncWebServer.h>
@@ -35,5 +35,7 @@ dec
 12a ESP8266接Adafruit SSD1306 連接Wifi LED顯示目前進度+ESP8266 IP
 
 12a-1 結合5a + 12a的集大成之作 
+12a-2 3個台風扇的開關+自動模式
+12a-3 
 
 13a ESP8266 接 繼電器 控制插頭設備 relayon relay 
