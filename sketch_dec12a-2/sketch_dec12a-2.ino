@@ -24,7 +24,7 @@ IRsend irsend1(irPin1);
 IRsend irsend2(irPin2);
 IRsend irsend3(irPin3);
 
-const int DHTPin = D4;
+const int DHTPin = D2;
 #define DHTTYPE DHT11
 DHT dht(DHTPin, DHTTYPE);
 

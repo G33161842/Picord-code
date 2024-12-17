@@ -1,19 +1,19 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
-#include <ESPAsyncWebServer.h>
 #include <DHT.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+#include <ESPAsyncWebServer.h>
 #include <IRremoteESP8266.h>
 #include <IRsend.h>
 
-#define DHTPIN D2
-#define DHTTYPE DHT11
-DHT dht(DHTPIN, DHTTYPE);
-
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
+#define DHTPIN D2
+#define DHTTYPE DHT11
+
+DHT dht(DHTPIN, DHTTYPE);
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 
 const char* ssid[] = {"daniu0807", "CHANG"};
@@ -37,32 +37,13 @@ const float thresholdTemplow = 25.0;
 
 AsyncWebServer server(80);
 
-void setup() {
-  Serial.begin(115200);
-  irsend1.begin();
-  irsend2.begin();
-  irsend3.begin();
-  dht.begin();
-
-  if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
-    Serial.println(F("SSD1306 allocation failed"));
-    for (;;);
-  }
-  display.clearDisplay();
-  display.display();
-
-  display.setTextSize(1);
-  display.setTextColor(SSD1306_WHITE);
-  display.setCursor(0, 0);
-  display.println("Connecting to Wi-Fi...");
-  display.display();
-
+void connectToWiFi() {
   bool connected = false;
   for (int i = 0; i < wifiNetworks; i++) {
-    Serial.print("Try to connect Wi-Fi: ");
+    Serial.print("Trying to connect to Wi-Fi: ");
     Serial.println(ssid[i]);
-    WiFi.begin(ssid[i], password[i]);
 
+    WiFi.begin(ssid[i], password[i]);
     int retries = 0;
     while (WiFi.status() != WL_CONNECTED && retries < 10) {
       delay(1000);
@@ -71,85 +52,88 @@ void setup() {
     }
 
     if (WiFi.status() == WL_CONNECTED) {
-      Serial.println("\nConnected to ");
+      Serial.println("\nConnected to Wi-Fi: ");
       Serial.println(ssid[i]);
-      display.clearDisplay();
-      display.setCursor(0, 0);
-      display.println("Wi-Fi Connected!");
-      display.print("IP Address: ");
-      display.println(WiFi.localIP());
-      display.display();
       connected = true;
       break;
     } else {
-      Serial.println("\nConnection failed, try next");
+      Serial.println("\nConnection failed, trying next...");
     }
   }
 
   if (!connected) {
-    Serial.println("Can't connect to any Wi-Fi!");
-    display.clearDisplay();
-    display.setCursor(0, 0);
-    display.println("Wi-Fi failed!");
-    display.display();
-    return;
+    Serial.println("Unable to connect to any Wi-Fi network!");
+    while (1);
+  }
+}
+
+void setup() {
+  Serial.begin(115200);
+  dht.begin();
+  irsend1.begin();
+  irsend2.begin();
+  irsend3.begin();
+
+  if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
+    Serial.println(F("SSD1306 allocation failed"));
+    for (;;);
   }
 
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0, 0);
+  display.println("Connecting to Wi-Fi...");
+  display.display();
+
+  connectToWiFi();
+
+  display.clearDisplay();
+  display.setCursor(0, 0);
+  display.println("Wi-Fi Connected!");
+  display.print("IP Address: ");
+  display.println(WiFi.localIP());
+  display.display();
+
+  // Set up web server routes
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
     String html = "<!DOCTYPE html><html><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'>";
-    html += "<title>Fan Control</title><style>body { font-family: Arial; text-align: center; }</style></head><body>";
+    html += "<title>Fan Control</title>";
+    html += "<style>body { font-family: Arial; text-align: center; padding: 20px; background: #f5f5f5; }";
+    html += ".button { display: block; width: 80%; max-width: 300px; margin: 10px auto; padding: 10px; background: #28a745; color: white; font-size: 20px; border: none; border-radius: 5px; }";
+    html += ".button:hover { background: #218838; }</style></head><body>";
     html += "<h1>Fan Control</h1>";
-    html += "<button onclick=\"sendRequest('/on1')\">Fan 1 ON</button>";
-    html += "<button onclick=\"sendRequest('/off1')\">Fan 1 OFF</button>";
-    html += "<button onclick=\"sendRequest('/on2')\">Fan 2 ON</button>";
-    html += "<button onclick=\"sendRequest('/off2')\">Fan 2 OFF</button>";
-    html += "<button onclick=\"sendRequest('/on3')\">Fan 3 ON</button>";
-    html += "<button onclick=\"sendRequest('/off3')\">Fan 3 OFF</button>";
-    html += "<button onclick=\"sendRequest('/auto')\">Enable Auto</button>";
-    html += "<button onclick=\"sendRequest('/manual')\">Manual Mode</button>";
-    html += "<p id='status'>Fan Status: Unknown</p>";
-    html += "<script>function sendRequest(url) { var xhr = new XMLHttpRequest(); xhr.open('GET', url, true); xhr.onload = function() { if (xhr.status === 200) { document.getElementById('status').innerText = xhr.responseText; } }; xhr.send(); }</script></body></html>";
+    html += "<button class='button' onclick=\"sendRequest('/on1')\">Fan 1 ON</button>";
+    html += "<button class='button' onclick=\"sendRequest('/off1')\">Fan 1 OFF</button>";
+    html += "<button class='button' onclick=\"sendRequest('/on2')\">Fan 2 ON</button>";
+    html += "<button class='button' onclick=\"sendRequest('/off2')\">Fan 2 OFF</button>";
+    html += "<button class='button' onclick=\"sendRequest('/on3')\">Fan 3 ON</button>";
+    html += "<button class='button' onclick=\"sendRequest('/off3')\">Fan 3 OFF</button>";
+    html += "<button class='button' onclick=\"sendRequest('/auto')\">Enable Auto Mode</button>";
+    html += "<button class='button' onclick=\"sendRequest('/manual')\">Switch to Manual Mode</button>";
+    html += "<script>function sendRequest(url) { fetch(url).then(resp => resp.text()).then(txt => alert(txt)); }</script></body></html>";
     request->send(200, "text/html", html);
   });
 
   server.on("/on1", HTTP_GET, [](AsyncWebServerRequest *request) {
     irsend1.sendSymphony(0xD82, 12);
     fan1 = 1;
-    request->send(200, "text/plain", "Fan 1: ON");
+    request->send(200, "text/plain", "Fan 1 is ON");
   });
   server.on("/off1", HTTP_GET, [](AsyncWebServerRequest *request) {
     irsend1.sendSymphony(0xD81, 12);
     fan1 = 0;
-    request->send(200, "text/plain", "Fan 1: OFF");
-  });
-  server.on("/on2", HTTP_GET, [](AsyncWebServerRequest *request) {
-    irsend2.sendSymphony(0xD82, 12);
-    fan2 = 1;
-    request->send(200, "text/plain", "Fan 2: ON");
-  });
-  server.on("/off2", HTTP_GET, [](AsyncWebServerRequest *request) {
-    irsend2.sendSymphony(0xD81, 12);
-    fan2 = 0;
-    request->send(200, "text/plain", "Fan 2: OFF");
-  });
-  server.on("/on3", HTTP_GET, [](AsyncWebServerRequest *request) {
-    irsend3.sendSymphony(0xD82, 12);
-    fan3 = 1;
-    request->send(200, "text/plain", "Fan 3: ON");
-  });
-  server.on("/off3", HTTP_GET, [](AsyncWebServerRequest *request) {
-    irsend3.sendSymphony(0xD81, 12);
-    fan3 = 0;
-    request->send(200, "text/plain", "Fan 3: OFF");
+    request->send(200, "text/plain", "Fan 1 is OFF");
   });
   server.on("/auto", HTTP_GET, [](AsyncWebServerRequest *request) {
     autoMode = 1;
-    request->send(200, "text/plain", "Auto Mode Enabled");
+    request->send(200, "text/plain", "Auto mode enabled");
   });
   server.on("/manual", HTTP_GET, [](AsyncWebServerRequest *request) {
     autoMode = 0;
-    request->send(200, "text/plain", "Manual Mode Enabled");
+    request->send(200, "text/plain", "Manual mode enabled");
   });
+  
 
   server.begin();
 }
@@ -158,69 +142,13 @@ void loop() {
   if (autoMode == 1) {
     float temperature = dht.readTemperature();
     if (!isnan(temperature)) {
-      Serial.print("Temperature: ");
-      Serial.println(temperature);
-      if (temperature >= thresholdTemphigh) {
-        if (fan1 == 0) {
-          irsend1.sendSymphony(0xD82, 12);
-          fan1 = 1;
-          delay(1000);
-        }
-        if (fan2 == 0) {
-          irsend2.sendSymphony(0xD82, 12);
-          fan2 = 1;
-          delay(1000);
-        }
-        if (fan3 == 0) {
-          irsend3.sendSymphony(0xD82, 12);
-          fan3 = 1;
-          delay(1000);
-        }
-      } else if (temperature < thresholdTemplow) {
-        if (fan1 == 1) {
-          irsend1.sendSymphony(0xD81, 12);
-          fan1 = 0;
-          delay(1000);
-        }
-        if (fan2 == 1) {
-          irsend2.sendSymphony(0xD81, 12);
-          fan2 = 0;
-          delay(1000);
-        }
-        if (fan3 == 1) {
-          irsend3.sendSymphony(0xD81, 12);
-          fan3 = 0;
-          delay(1000);
-        }
+      if (temperature >= thresholdTemphigh && fan1 == 0) {
+        irsend1.sendSymphony(0xD82, 12);
+        fan1 = 1;
+      } else if (temperature < thresholdTemplow && fan1 == 1) {
+        irsend1.sendSymphony(0xD81, 12);
+        fan1 = 0;
       }
-    } else {
-      Serial.println("Failed to read temperature");
     }
-    delay(10000);
-  }
-
-  if (WiFi.status() == WL_CONNECTED) {
-    HTTPClient http;
-    WiFiClient client;
-    http.begin(client, serverUrl);
-    http.addHeader("Content-Type", "application/x-www-form-urlencoded");
-
-    float temp = dht.readTemperature();
-    float humidity = dht.readHumidity();
-
-    if (!isnan(temp) && !isnan(humidity)) {
-      String postData = "temperature=" + String(temp) + "&humidity=" + String(humidity);
-      int httpResponseCode = http.POST(postData);
-
-      if (httpResponseCode > 0) {
-        Serial.println(httpResponseCode);
-        Serial.println(http.getString());
-      } else {
-        Serial.println("Failed to send DHT data");
-      }
-    } else {
-      Serial.println("Failed to read DHT data");
-    }
-    http.end();
   }
 }
