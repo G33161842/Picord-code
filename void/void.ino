@@ -162,35 +162,41 @@ void setup() {
   });
 
   server.on("/on1", HTTP_GET, [](AsyncWebServerRequest *request) {
+    autoMode = 0;
     irsend1.sendSymphony(0xD82, 12);
     fan1 = 1;
     request->send(200, "text/plain", "風扇1狀態：開啟");
   });
   server.on("/off1", HTTP_GET, [](AsyncWebServerRequest *request) {
+    autoMode = 0;
     irsend1.sendSymphony(0xD81, 12);
     fan1 = 0;
     request->send(200, "text/plain", "風扇1狀態：關閉");
   });
 
   server.on("/on2", HTTP_GET, [](AsyncWebServerRequest *request) {
+    autoMode = 0;
     irsend2.sendSymphony(0xD82, 12);
     fan2 = 1;
     request->send(200, "text/plain", "風扇2狀態：開啟");
   });
 
   server.on("/off2", HTTP_GET, [](AsyncWebServerRequest *request) {
+    autoMode = 0;
     irsend2.sendSymphony(0xD81, 12);
     fan2 = 0;
     request->send(200, "text/plain", "風扇2狀態：關閉");
   });
 
   server.on("/on3", HTTP_GET, [](AsyncWebServerRequest *request) {
+    autoMode = 0;
     irsend3.sendSymphony(0xD82, 12);
     fan3 = 1;
     request->send(200, "text/plain", "風扇3狀態：開啟");
   });
 
   server.on("/off3", HTTP_GET, [](AsyncWebServerRequest *request) {
+    autoMode = 0;
     irsend3.sendSymphony(0xD81, 12);
     fan3 = 0;
     request->send(200, "text/plain", "風扇3狀態：關閉");
