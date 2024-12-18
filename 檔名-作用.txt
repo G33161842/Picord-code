@@ -5,15 +5,18 @@ ESP8266
 IRremoteESP8266
 ESP8266WiFi
 ESPAsyncWebServer
-DHT
+DHT sensor library by Adafruit
 Adafruit SSD1306
 
 #include <ESP8266WiFi.h>
+#include <ESP8266HTTPClient.h>
+#include <DHT.h>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
 #include <ESPAsyncWebServer.h>
 #include <IRremoteESP8266.h>
 #include <IRsend.h>
-#include <IRrecv.h>
-#include <IRutils.h>
 
 nov
 14a測紅外線訊號的
