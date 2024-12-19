@@ -1,5 +1,7 @@
 https://arduino.esp8266.com/stable/package_esp8266com_index.json
 
+nodemcu
+
 ESP8266
 
 IRremoteESP8266
@@ -17,6 +19,9 @@ Adafruit SSD1306
 #include <ESPAsyncWebServer.h>
 #include <IRremoteESP8266.h>
 #include <IRsend.h>
+
+ESP8266 張永鴻的連接資料庫
+ESP8266DHT1、2、3 放教室三個角落的 偵測溫度然後
 
 nov
 14a測紅外線訊號的

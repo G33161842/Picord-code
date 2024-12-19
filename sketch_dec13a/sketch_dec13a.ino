@@ -1,11 +1,11 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 
-const char* ssid = "picord";
-const char* password = "000010000";
+//const char* ssid = "picord";
+//const char* password = "000010000";
 
-//const char* ssid = "daniu0807";
-//const char* password = "33161842";
+const char* ssid = "daniu0807";
+const char* password = "33161842";
 
 // 繼電器接的GPIO
 #define RELAY_PIN D5
