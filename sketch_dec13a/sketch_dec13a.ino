@@ -8,7 +8,7 @@ const char* password = "000010000";
 //const char* password = "33161842";
 
 // 繼電器接的GPIO
-#define RELAY_PIN D8
+#define RELAY_PIN D5
 
 ESP8266WebServer server(80);
 

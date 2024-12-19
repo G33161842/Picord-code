@@ -19,7 +19,7 @@ const int wifiNetworks = 2;
 const char* serverUrl = "http://redweb.magicboy.xyz/upload.php";
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
-const int irPin1 = D4;
+const int irPin1 = D8;
 const int irPin2 = D5;
 const int irPin3 = D6;
 IRsend irsend1(irPin1);
